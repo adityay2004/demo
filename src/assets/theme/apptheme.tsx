@@ -1,4 +1,4 @@
-import { StatusBar } from 'react-native';
+import {StatusBar} from 'react-native';
 
 type ThemeColors = {
   text: string;
@@ -15,7 +15,7 @@ type ThemeColors = {
   textLight: string;
   danger: string;
   secondaryBackground: string;
-  coralRed: string;
+  steelTeal: string; //
   redBackground: string;
   blueGray: string;
   paleSkyBlue: string;
@@ -52,7 +52,7 @@ const Apptheme: AppThemeType = {
     textLight: '#878A9A',
     danger: '#F05F4A',
     secondaryBackground: '#f0f0f0',
-    coralRed: '#fe6665',
+    steelTeal: '#00778b',
     redBackground: '#fcecec',
     blueGray: '#edf1f7',
     paleSkyBlue: '#dfe8f5',
