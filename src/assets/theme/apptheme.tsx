@@ -3,8 +3,8 @@ import {StatusBar} from 'react-native';
 type ThemeColors = {
   text: string;
   subText: string;
-  background: string;
-  whiteBackground: string;
+  background: string; //
+  whiteBackground: string; //
   black: string;
   blue: string;
   whiteText: string;
@@ -21,14 +21,17 @@ type ThemeColors = {
   paleSkyBlue: string;
   tealBlue: string;
   darkBlue: string;
-  oceanBlue: string;
+  orangepeel: string; //
+  tealGreen: string; //
+  borderColor: string; //
 };
 
 type ThemeSpacing = {
   paddingTop: number | undefined;
   screenPaddingVertical: number;
   screenPaddingHorizontal: number;
-  KeyboardHeight: number;
+  textBoxHeight: number;
+  buttonHeight: number;
 };
 
 type AppThemeType = {
@@ -40,7 +43,7 @@ const Apptheme: AppThemeType = {
   color: {
     text: '#555555',
     subText: '#787878',
-    background: '#fff',
+    background: '#f5f5f3',
     whiteBackground: '#ffffff',
     black: '#000',
     blue: '#0C1C5C',
@@ -58,13 +61,16 @@ const Apptheme: AppThemeType = {
     paleSkyBlue: '#dfe8f5',
     tealBlue: '#0097a8',
     darkBlue: '#1a4f8b',
-    oceanBlue: '#4FB0C9',
+    orangepeel: '#f39104',
+    tealGreen: '#21695D',
+    borderColor: '#f0f0f0',
   },
   spacing: {
     paddingTop: StatusBar.currentHeight,
     screenPaddingVertical: 10,
     screenPaddingHorizontal: 14,
-    KeyboardHeight: 40,
+    textBoxHeight: 50,
+    buttonHeight: 44,
   },
 };
 

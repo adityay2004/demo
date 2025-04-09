@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Pressable,
   Image,
   Dimensions,
 } from 'react-native';
@@ -19,9 +18,6 @@ import {AppNavigationProp} from '../../navigation/types/navigationType';
 const {height} = Dimensions.get('window');
 const Index: React.FC = () => {
   const navigation = useNavigation<AppNavigationProp>();
-
-  const [value, setValue] = useState<string>('');
-  const [error, setError] = useState<string>('');
 
   return (
     <View style={{flex: 1}}>
@@ -47,7 +43,11 @@ const Index: React.FC = () => {
         </View>
 
         <View style={styles.buttonView}>
-          <TouchableOpacity style={styles.button} onPress={() => {}}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              navigation.navigate(RouteName.REGISTER_SCREEN);
+            }}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -74,19 +74,19 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
   sectionTitle: {
-    fontFamily: FontFamily.INTER500,
-    fontSize: 22,
+    fontFamily: FontFamily.INTER600,
+    fontSize: 18.5,
     color: Apptheme.color.text,
     paddingRight: 66,
-    lineHeight: 30,
+    lineHeight: 28,
   },
   sectionSubtitle: {
     fontFamily: FontFamily.INTER500,
-    fontSize: 14.5,
+    fontSize: 12.5,
     color: Apptheme.color.subText,
     marginTop: 16,
     paddingRight: 66,
-    lineHeight: 21.5,
+    lineHeight: 18.5,
   },
   button: {
     backgroundColor: Apptheme.color.steelTeal,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     width: '47%',
   },
   buttonText: {
-    fontFamily: FontFamily.INTER500,
+    fontFamily: FontFamily.INTER600,
     fontSize: 14,
     color: Apptheme.color.whiteText,
   },

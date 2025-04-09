@@ -1,29 +1,56 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import {Checkbox} from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import Apptheme from '../../assets/theme/apptheme';
 import {FontFamily} from '../../assets/theme/font';
 import CommonButton from '../../assets/component/CommonButton';
 import LinearGradient from 'react-native-linear-gradient';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import {AppNavigationProp} from '../../navigation/types/navigationType';
-import {useNavigation} from '@react-navigation/native';
+import SmoothPinCodeInput from '../../assets/component/SmoothPinCodeInput';
 import RouteName from '../../navigation/RouteName';
+import {useNavigation} from '@react-navigation/native';
+import {AppNavigationProp} from '../../navigation/types/navigationType';
 
-const RegisterScreen: React.FC = () => {
-  const [phone, setPhone] = React.useState('');
-  const [checked, setChecked] = React.useState(true);
+const Otp_Varification: React.FC = () => {
+  const [code, setCode] = useState('');
   const navigation = useNavigation<AppNavigationProp>();
+
+  const otpCount: number = 10;
+
+  const [otpCountdown, setOtpCountdown] = useState<number>(otpCount);
+  const [resendEnabled, setResendEnabled] = useState<boolean>(false);
+  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(true);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isTimerRunning) {
+      timer = setInterval(() => {
+        setOtpCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setResendEnabled(true);
+            setIsTimerRunning(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isTimerRunning]);
+
+  const resendOTP = (): void => {
+    setOtpCountdown(otpCount);
+    setResendEnabled(false);
+    setIsTimerRunning(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -37,40 +64,54 @@ const RegisterScreen: React.FC = () => {
           <Text
             style={[
               styles.headerText,
+              {
+                color: Apptheme.color.text,
+                fontSize: 13.5,
+                marginBottom: 3,
+                fontFamily: FontFamily.INTER500,
+              },
+            ]}>
+            Enter the OTP received on
+          </Text>
+          <Text
+            style={[
+              styles.headerText,
               {color: Apptheme.color.text, fontSize: 16.5},
             ]}>
-            Lets's Create Your Account
+            +91 1234567890
           </Text>
-          <View style={styles.phoneInputContainer}>
-            <Text style={styles.countryCode}>+91</Text>
-            <TextInput
-              style={styles.phoneInput}
-              placeholder="Enter your phone number"
-              keyboardType="phone-pad"
-              value={phone}
-              onChangeText={setPhone}
+          <View style={{alignItems: 'center', marginTop: 20}}>
+            <SmoothPinCodeInput
+              value={code}
+              onTextChange={setCode}
+              cellStyle={styles.cell}
+              cellStyleFocused={styles.cellFocused}
+              codeLength={4}
+              textStyle={styles.pinStyle}
+              cellSpacing={10}
+              keyboardType="number-pad"
+              placeholder={<View style={styles.placeholder}></View>}
             />
-          </View>
 
-          <View style={styles.checkboxContainer}>
-            <Checkbox
-              status="checked"
-              //  ch={checked}
-              onPress={() => {
-                setChecked(!checked);
-              }}
-              color={Apptheme.color.tealGreen}
-            />
-            <Text style={styles.checkboxLabel}>
-              Receive updates and reminders on Whatsapp
-            </Text>
+            <View style={styles.otpView}>
+              {resendEnabled ? (
+                <TouchableOpacity onPress={() => resendOTP()}>
+                  <Text style={styles.resendText}>Resend OTP</Text>
+                </TouchableOpacity>
+              ) : (
+                <Text
+                  style={
+                    styles.otpCountText
+                  }>{`Resend OTP in ${otpCountdown} sec.`}</Text>
+              )}
+            </View>
           </View>
 
           <View style={styles.buttonView}>
             <CommonButton
-              buttonText="Continue"
+              buttonText="Verify"
               onPress={() => {
-                navigation.navigate(RouteName.OTP_VERIFICATION_SCREEN);
+                navigation.navigate(RouteName.USERDETAILS_FILL_SCREEN);
               }}
               buttonStyle={{
                 width: '100%',
@@ -126,7 +167,7 @@ const RegisterScreen: React.FC = () => {
   );
 };
 
-export default RegisterScreen;
+export default Otp_Varification;
 
 const styles = StyleSheet.create({
   container: {
@@ -159,43 +200,6 @@ const styles = StyleSheet.create({
     fontSize: 11.5,
     color: Apptheme.color.whiteText,
     textAlign: 'right',
-  },
-  phoneInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginBottom: 3,
-    backgroundColor: Apptheme.color.whiteBackground,
-    borderWidth: 1,
-    borderColor: Apptheme.color.borderColor,
-  },
-  countryCode: {
-    marginRight: 8,
-    fontSize: 14.5,
-    color: Apptheme.color.text,
-    fontFamily: FontFamily.INTER500,
-  },
-  phoneInput: {
-    flex: 1,
-    height: Apptheme.spacing.textBoxHeight,
-    fontSize: 12.5,
-    color: Apptheme.color.text,
-    fontFamily: FontFamily.INTER500,
-    borderRadius: 10,
-    backgroundColor: Apptheme.color.whiteBackground,
-    paddingHorizontal: 14,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 6,
-    marginTop: 26,
-  },
-  checkboxLabel: {
-    fontSize: 11.5,
-    color: Apptheme.color.subText,
-    fontFamily: FontFamily.INTER500,
   },
   buttonView: {
     paddingTop: 0,
@@ -259,5 +263,44 @@ const styles = StyleSheet.create({
   },
   link: {
     textDecorationLine: 'underline',
+  },
+  otpCountText: {
+    fontFamily: FontFamily.INTER400,
+    fontSize: 12,
+    color: Apptheme.color.subText,
+  },
+  resendText: {
+    fontFamily: FontFamily.INTER600,
+    fontSize: 12,
+    color: Apptheme.color.tealGreen,
+  },
+  cell: {
+    borderWidth: 2.5,
+    borderColor: Apptheme.color.borderColor,
+    borderRadius: 8,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    paddingLeft: 2,
+    backgroundColor: Apptheme.color.whiteBackground,
+  },
+  cellFocused: {
+    borderColor: Apptheme.color.tealGreen,
+  },
+  placeholder: {
+    height: 2,
+    width: 6,
+    backgroundColor: '#ccc',
+    alignSelf: 'center',
+  },
+  pinStyle: {
+    fontFamily: FontFamily.INTER500,
+    fontSize: 20.5,
+    color: Apptheme.color.subText,
+  },
+  otpView: {
+    marginBottom: 30,
+    marginLeft: 8,
+    marginTop: 28,
   },
 });

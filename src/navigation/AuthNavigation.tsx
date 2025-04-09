@@ -7,6 +7,8 @@ import AppNavigator from './AppNavigator';
 import {MainStackParamList} from './types/navigationType';
 import Index from '../screens/Auth/Index';
 import RegisterScreen from '../screens/Auth/RegisterScreen';
+import Otp_Varification from '../screens/Auth/Otp_Varification';
+import AboutDetails from '../screens/Auth/AboutDetails';
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
@@ -23,6 +25,14 @@ const AuthNavigation = () => {
       <Stack.Screen
         name={RouteName.REGISTER_SCREEN}
         component={RegisterScreen}
+      />
+      <Stack.Screen
+        name={RouteName.OTP_VERIFICATION_SCREEN}
+        component={Otp_Varification}
+      />
+      <Stack.Screen
+        name={RouteName.USERDETAILS_FILL_SCREEN}
+        component={AboutDetails}
       />
 
       <Stack.Screen name={RouteName.APP_NAVIGATION} component={AppNavigator} />
